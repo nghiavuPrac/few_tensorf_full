@@ -184,7 +184,8 @@ def inference(log_dir):
 
         args = config_parser(cmd_arguments)
 
-        split_pattern = re.compile(r"\\")
+
+        # split_pattern = re.compile(r"\\")
         # if  split_pattern.search(args.datadir):
         #     args.datadir = "/".join(args.datadir.split('\\'))
 
@@ -216,13 +217,17 @@ def inference(log_dir):
                 camera_angle_y = camera_angle_x
             camera_angles = [camera_angle_x, camera_angle_y]
 
-            if args.dataset_name == "blender":
+            if args.dataset_name == "blender" and dataset_type == "nerf_synthetic":
                 file_path = frame['file_path'].split('.')[-1]
                 image_path = os.path.join(args.datadir, f"{frame['file_path']}.png")
-            if args.dataset_name == "human":
+            elif args.dataset_name == "human" and dataset_type == "Human":
                 file_path = frame['file_path'].split('\\')[-1].split('.')[-2]
                 image_path = os.path.join(args.datadir , split_type,file_path+'.png')
-
+            else:
+                if args.dataset_name == "human":
+                    raise ValueError("you must choose dataset type 'Human'")
+                if args.dataset_name == "blender":
+                    raise ValueError("you must choose dataset type 'nerf_synthetic'")
             formatted_path = os.path.join(*image_path.split('/'))
             
             file_path = formatted_path

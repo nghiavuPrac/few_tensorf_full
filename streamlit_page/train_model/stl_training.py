@@ -108,4 +108,7 @@ def training_model(config_dir):
 
         if train_button:    
             with st.spinner('Wait for it...'):
-                reconstruction(args)                
+                ckpt_path = reconstruction(args)
+
+                import shutil 
+                shutil.copy(args.config, ckpt_path[:-3]+'.txt')    

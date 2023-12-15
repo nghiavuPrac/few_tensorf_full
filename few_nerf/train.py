@@ -14,6 +14,7 @@ from .dataLoader import dataset_dict
 from .opt import config_parser
 from .renderer import *
 from .utils import *
+import nerfacc
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -35,7 +36,6 @@ class SimpleSampler:
         return self.ids[self.curr : self.curr + self.batch]
 
 
-@torch.no_grad()
 @torch.no_grad()
 def export_mesh(args, ckpt_path):
     ckpt = torch.load(ckpt_path, map_location=device)
@@ -62,6 +62,7 @@ def render_test(args):
         split="test",
         downsample=args.downsample_train,
         is_stack=True,
+        N_imgs = args.N_test_imgs
     )
     white_bg = test_dataset.white_bg
     ndc_ray = args.ndc_ray
